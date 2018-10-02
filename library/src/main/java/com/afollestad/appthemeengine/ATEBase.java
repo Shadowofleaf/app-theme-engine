@@ -1,5 +1,6 @@
 package com.afollestad.appthemeengine;
 
+import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;

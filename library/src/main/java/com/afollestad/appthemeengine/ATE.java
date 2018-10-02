@@ -6,8 +6,10 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -246,7 +248,7 @@ public final class ATE extends ATEBase {
         color = ATEUtil.stripAlpha(color);
         // Default is app's launcher icon
         if (icon == null)
-            icon = ((BitmapDrawable) activity.getApplicationInfo().loadIcon(activity.getPackageManager())).getBitmap();
+            icon = (getBitmapFromDrawable(activity.getApplicationInfo().loadIcon(activity.getPackageManager())));
 
         // Sets color of entry in the system recents page
         ActivityManager.TaskDescription td = new ActivityManager.TaskDescription(
@@ -286,6 +288,16 @@ public final class ATE extends ATEBase {
         if (toolbar != null && toolbar.getParent() instanceof CollapsingToolbarLayout)
             return; // collapsing toolbar handles the overflow color
         ATEUtil.setOverflowButtonColor(activity, toolbar, tintColor);
+    }
+
+        @NonNull
+    private static Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
+        Bitmap bmp = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmp);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bmp;
     }
 
     private ATE() {
